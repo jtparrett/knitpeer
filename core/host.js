@@ -45,13 +45,15 @@ const broadcastToAllPeers = (peers, message) => {
 const addPeerConnection = (connection) => {
   const id = uuid()
 
+  console.log('new peer connected')
+
   connection.on('message', async (message) => {
     const text = message.toString()
     const id = SHA256(text).toString()
     
     const [messageExists] = await findMessage(id)
 
-    console.log(text)
+    console.log('message:', text)
 
     if(!!messageExists) return false
 
@@ -66,6 +68,7 @@ const addPeerConnection = (connection) => {
   const removePeer = () => {
     const {[id]: _, ...rest} = peers
     peers = rest
+    console.log('peer disconnected')
   }
 
   connection.on('close', removePeer)
